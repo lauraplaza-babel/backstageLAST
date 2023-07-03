@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: mybackstage
-          image: lauraplaza/backstage:1.0.5
+          image: lauraplaza/backstage:1.0.6
           imagePullPolicy: 'Always'
           ports:
             - name: http

@@ -1,4 +1,6 @@
 import React from 'react';
+import { githubAuthApiRef } from '@backstage/core-plugin-api';
+import { SignInPage } from '@backstage/core-components';
 import { Navigate, Route } from 'react-router-dom';
 import { apiDocsPlugin, ApiExplorerPage } from '@backstage/plugin-api-docs';
 import {
@@ -33,8 +35,26 @@ import { AppRouter, FlatRoutes } from '@backstage/core-app-api';
 import { CatalogGraphPage } from '@backstage/plugin-catalog-graph';
 import { RequirePermission } from '@backstage/plugin-permission-react';
 import { catalogEntityCreatePermission } from '@backstage/plugin-catalog-common/alpha';
+import { EntityLayout } from '@backstage/plugin-catalog';
+import { EntityTechdocsContent } from '@backstage/plugin-techdocs';
 
 const app = createApp({
+  components: {
+    SignInPage: props => (
+      <SignInPage
+        {...props}
+        providers={[
+          'guest',
+          {
+            id: 'github-auth-provider',
+            title: 'GitHub',
+            message: 'Sign in using GitHub',
+            apiRef: githubAuthApiRef,
+          },
+        ]}
+      />
+    ),
+  },
   apis,
   bindRoutes({ bind }) {
     bind(catalogPlugin.externalRoutes, {
@@ -50,7 +70,10 @@ const app = createApp({
     bind(orgPlugin.externalRoutes, {
       catalogIndex: catalogPlugin.routes.catalogIndex,
     });
-  },
+  }
+
+
+
 });
 
 const routes = (
@@ -68,9 +91,14 @@ const routes = (
       path="/docs/:namespace/:kind/:name/*"
       element={<TechDocsReaderPage />}
     >
-      <TechDocsAddons>
-        <ReportIssue />
-      </TechDocsAddons>
+     <EntityLayout.Route path="/docs" title="Docs">
+  <EntityTechdocsContent>
+    <TechDocsAddons>
+      <ReportIssue />
+      {/* Other addons can be added here. */}
+    </TechDocsAddons>
+  </EntityTechdocsContent>
+</EntityLayout.Route>;
     </Route>
     <Route path="/create" element={<ScaffolderPage />} />
     <Route path="/api-docs" element={<ApiExplorerPage />} />

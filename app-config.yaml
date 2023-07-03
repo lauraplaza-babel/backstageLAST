@@ -1,9 +1,9 @@
 app:
-  title: Scaffolded Backstage App
+  title: Babel App
   baseUrl: http://localhost:3000
 
 organization:
-  name: My Company
+  name: Babel
 
 backend:
   # Used for enabling authentication, secret is shared by all backend plugins
@@ -28,23 +28,25 @@ backend:
   # This is for local development only, it is not recommended to use this in production
   # The production database configuration is stored in app-config.production.yaml
   database:
+    client: better-sqlite3
+    connection: ':memory:'
+ # database:
     # config options: https://node-postgres.com/apis/client
-    client: pg
-    connection:
-      host: ${POSTGRES_HOST}
-      port: ${POSTGRES_PORT}
-      user: ${POSTGRES_USER}
-      password: ${POSTGRES_PASSWORD}
+  #  client: pg
+   # connection:
+    #  host: ${POSTGRES_HOST}
+     # port: ${POSTGRES_PORT}
+      #user: ${POSTGRES_USER}
+      #password: ${POSTGRES_PASSWORD} '
 integrations:
   github:
     - host: github.com
       # This is a Personal Access Token or PAT from GitHub. You can find out how to generate this token, and more information
       # about setting up the GitHub integration here: https://backstage.io/docs/getting-started/configuration#setting-up-a-github-integration
-      token: ${GITHUB_TOKEN}
-    ### Example for how to add your GitHub Enterprise instance using the API:
-    # - host: ghe.example.net
-    #   apiBaseUrl: https://ghe.example.net/api/v3
-    #   token: ${GHE_TOKEN}
+      token: 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 #Z2hwX3pPa3BORzhFQndTVThxeWlJNE5BcEJOaHJqOGk4YTFDOWl0bw== #${GITHUB_TOKEN}
+      repos: 
+        - owner: lauraplaza-babel 
+          name:
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
@@ -60,16 +62,24 @@ proxy:
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
-    runIn: 'docker' # Alternatives - 'local'
+    runIn: 'local' # 'docker'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
-  # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ZWU0YWYzNTNiNjhkNTRiZDJmYTA= #${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: MjAzMGQ5ZDk3MTdlMTAwNmUxZWMxMGFhODEzZTdmNmI3OWIwMzBkZg== # ${AUTH_GITHUB_CLIENT_SECRET}
+
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
+  github:
+    token: Z2hwX3pPa3BORzhFQndTVThxeWlJNE5BcEJOaHJqOGk4YTFDOWl0bw==
+  visibility: public
 
 catalog:
   import:
@@ -95,11 +105,11 @@ catalog:
         - allow: [User, Group]
 
     ## Uncomment these lines to add more example data
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
 
     ## Uncomment these lines to add an example org
-    # - type: url
-    #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
-    #   rules:
-    #     - allow: [User, Group]
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+      rules:
+        - allow: [User, Group]
