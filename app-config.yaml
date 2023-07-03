@@ -154,7 +154,7 @@ catalog:
  #   - allow: [Component, System, API, Resource, Location]
   locations:
     - type: url
-      target: https://github.com/MarioVega1991/BackstageMario2/blob/main/catalog-model/artist-lookup-componente.yaml
+      target: https://github.com/lauraplaza-babel/backstageLAST/blob/master/catalogo/artist-lookup-component.yaml
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
       target: ../../examples/entities.yaml
