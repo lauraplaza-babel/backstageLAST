@@ -46,7 +46,8 @@ integrations:
       token: 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 #Z2hwX3pPa3BORzhFQndTVThxeWlJNE5BcEJOaHJqOGk4YTFDOWl0bw== #${GITHUB_TOKEN}
       repos: 
         - owner: lauraplaza-babel 
-          name:
+          name: backstageLAST
+          baseUrl: https://github.com/lauraplaza-babel/backstageLAST
 
 proxy:
   ### Example for how to add a proxy endpoint for the frontend.
