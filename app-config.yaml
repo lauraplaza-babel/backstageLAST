@@ -63,7 +63,7 @@ proxy:
 techdocs:
   builder: 'local' # Alternatives - 'external'
   generator:
-    runIn: 'local' # 'docker'
+    runIn: 'docker' # 'docker'
   publisher:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
@@ -78,17 +78,83 @@ auth:
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
-  github:
-    token: Z2hwX3pPa3BORzhFQndTVThxeWlJNE5BcEJOaHJqOGk4YTFDOWl0bw==
-  visibility: public
+  defaultAuthor:
+    name: Laura Plaza # Defaults to `Scaffolder`
+    email: laura.plaza@babelgroup.com # Defaults to `scaffolder@backstage.io`
+  defaultCommitMessage: "Another commit scaffolded" # Defaults to 'Initial commit'
+
 
 catalog:
+  rules:
+    - allow: [Component, API, Location, Template]
+  providers:
+    github:
+      # the provider ID can be any camelCase string
+      providerId:
+        organization: 'backstage' # string
+        catalogPath: '/catalog-info.yaml' # string
+        filters:
+          branch: 'main' # string
+          repository: '.*' # Regex
+        schedule: # optional; same options as in TaskScheduleDefinition
+          # supports cron, ISO duration, "human duration" as used in code
+          frequency: { minutes: 30 }
+          # supports ISO duration, "human duration" as used in code
+          timeout: { minutes: 3 }
+      customProviderId:
+        organization: 'new-org' # string
+        catalogPath: '/custom/path/catalog-info.yaml' # string
+        filters: # optional filters
+          branch: 'develop' # optional string
+          repository: '.*' # optional Regex
+      wildcardProviderId:
+        organization: 'new-org' # string
+        catalogPath: '/groups/**/*.yaml' # this will search all folders for files that end in .yaml
+        filters: # optional filters
+          branch: 'develop' # optional string
+          repository: '.*' # optional Regex
+      topicProviderId:
+        organization: 'backstage' # string
+        catalogPath: '/catalog-info.yaml' # string
+        filters:
+          branch: 'main' # string
+          repository: '.*' # Regex
+      topicFilterProviderId:
+        organization: 'backstage' # string
+        catalogPath: '/catalog-info.yaml' # string
+        filters:
+          branch: 'main' # string
+          repository: '.*' # Regex
+          topic:
+            include: ['backstage-include'] # optional array of strings
+            exclude: ['experiments'] # optional array of strings
+      validateLocationsExist:
+        organization: 'backstage' # string
+        catalogPath: '/catalog-info.yaml' # string
+        filters:
+          branch: 'main' # string
+          repository: '.*' # Regex
+        validateLocationsExist: true # optional boolean
+      visibilityProviderId:
+        organization: 'backstage' # string
+        catalogPath: '/catalog-info.yaml' # string
+        filters:
+          visibility:
+            - public
+            - internal
+
+
+
+
+
   import:
     entityFilename: catalog-info.yaml
     pullRequestBranchName: backstage-integration
-  rules:
-    - allow: [Component, System, API, Resource, Location]
+#  rules:
+ #   - allow: [Component, System, API, Resource, Location]
   locations:
+    - type: url
+      target: https://github.com/MarioVega1991/BackstageMario2/blob/main/catalog-model/artist-lookup-componente.yaml
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
     - type: file
       target: ../../examples/entities.yaml
